@@ -13,7 +13,7 @@ function App() {
           <Editor />
         </Grid>
         <Grid item xs={6}>
-          {/* <List  /> */}
+          <List  />
         </Grid>
       </Grid>
     </div>

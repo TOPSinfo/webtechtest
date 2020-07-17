@@ -10,23 +10,16 @@ import {
 import InputBase from '@material-ui/core/InputBase';
 import Checkbox from '@material-ui/core/Checkbox';
 import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
+import GridList from '@material-ui/core/GridList';
+import GridListTile from '@material-ui/core/GridListTile';
+import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
 
-const useStyles = makeStyles(() => ({
-  root: {
-    maxWidth: 345,
-  },
-  media: {
-    height: 140,
-  },
-}));
-
+// import { Formik, Form, FormikProps } from ‘formik’
+// import * as Yup from ‘yup’
 const BootstrapInput = withStyles((theme) => ({
   root: {
     'label + &': {
@@ -39,7 +32,7 @@ const BootstrapInput = withStyles((theme) => ({
     backgroundColor: theme.palette.common.white,
     border: '1px solid #ced4da',
     fontSize: 16,
-    width: 'auto',
+    width: '100%',
     padding: '10px 12px',
     marginRight: '20px',
     marginBottom: '20px',
@@ -70,8 +63,10 @@ interface Props {
 
 interface State {
   question: string;
-  ans1: boolean,
-  ans2: boolean
+  ans1: string,
+  ans2: string,
+  isCorrect1: boolean,
+  isCorrect2: boolean
 }
 
 export class Editor extends Component<Props,State> {
@@ -79,8 +74,16 @@ export class Editor extends Component<Props,State> {
     super(props);
     this.state = {
       question: '',
-      ans1: false,
-      ans2: false
+      // ans: [
+      //   {
+      //     ans1: '',
+      //     isCorrect: false
+      //   }
+      // ],
+      ans1: '',
+      ans2:'',
+      isCorrect1: false,
+      isCorrect2: false
     }
   }
   // Before the component mounts, we initialise our state
@@ -91,50 +94,113 @@ export class Editor extends Component<Props,State> {
   componentDidMount() {
   }
 
-  handleChange = (tag:String, event:any) => {
-
-    // this.setState({ [tag] : event.target.value});
+  handleChange = (event:any) => {
+    this.setState({ [event.target.name] : event.target.value} as State);
   };
+
+  handleChecked = (event: any) => {
+    this.setState({ [event.target.name] : event.target.checked} as State);
+  }
+
+  handleSubmit = () => {
+    // your submit logic
+  }
+
   // render will know everything!
   render() {
     return (<div>
-        <Card className={'maxWidth: 345; '}>
+        <Card style={{'margin': '15Px'}}>
           <CardContent>
-            <Typography gutterBottom variant="h5" component="h2">
-              Question
-            </Typography>
-            <Typography>
-              <BootstrapInput id="bootstrap-input" multiline
-                rowsMax={4}
-                value={this.state.question}
-                onChange={(e) => this.handleChange('question', e)}
-                />
-            </Typography>
+            <GridList className={'height: auto'} cols={3}>
+                <GridListTile style={{'height': 'auto'}} rows={1} cols={2} component={'div'}>
+                  <h2>Question</h2>
+                </GridListTile>
+                <GridListTile style={{'width': '100%', 'height': 'auto'}} cols={3}>
+                {/* <ValidatorForm
+                    ref="form"
+                    onSubmit={this.handleSubmit}
+                    onError={errors => console.log(errors)}
+                >
+                    <TextValidator
+                        id="bootstrap-input" multiline
+                        rowsMax={4}
+                        style={{'width': '100%', 'height': 'auto'}}
+                        onChange={(e) => this.handleChange(e)}
+                        name="question"
+                        value={this.state.question}
+                        validators={['required']}
+                        errorMessages={['Question is required']}
+                    />
+                    <Button type="submit">Add</Button>
+                </ValidatorForm> */}
+                  <BootstrapInput id="bootstrap-input" multiline
+                    name="question"
+                    rowsMax={4}
+                    value={this.state.question}
+                    style={{'width': '100%', 'height': 'auto'}}
+                    onChange={(e) => this.handleChange(e)}
+                    />
+                </GridListTile>
+            </GridList>
           </CardContent>
           <CardContent>
-            <Typography gutterBottom variant="h5" component="h2">
-              Answers
-              <p>isCorrect</p>
-            </Typography>
-            <Typography>
-              <BootstrapInput id="bootstrap-input" />
-              <Checkbox
-                checked={this.state.ans1}
-                onChange={(e) => this.handleChange('ans1', e)}
-                name="checkedB"
-                color="primary"
-              />
-            </Typography>
-            <Typography>
-              <BootstrapInput id="bootstrap-input" />
-              <Checkbox
-                checked={this.state.ans2}
-                onChange={(e) => this.handleChange('ans2', e)}
-                name="checkedB"
-                color="primary"
-              />
-            </Typography>
-
+              <GridList className={'height: auto'} cols={3}>
+                <GridListTile style={{'height': 'auto'}} rows={1} cols={2} component={'div'}>
+                  <h2>Answer</h2>
+                </GridListTile>
+                <GridListTile style={{'height': 'auto'}} rows={1} cols={1} component={'div'}>
+                  <h2>isCorrect</h2>
+                </GridListTile>
+              </GridList>
+              <GridList className={'height: auto'} cols={3}>
+                <GridListTile style={{'height': 'auto'}} rows={1} cols={2}>
+                {/* <ValidatorComponent> */}
+                  <BootstrapInput id="bootstrap-input" multiline
+                    name="ans1"
+                    rowsMax={4}
+                    value={this.state.question}
+                    style={{'width': '100%', 'height': 'auto'}}
+                    onChange={(e) => this.handleChange(e)}
+                    />
+                {/* </ValidatorComponent> */}
+                </GridListTile>
+                <GridListTile style={{'height': 'auto'}} rows={1} cols={1}>
+                  <Checkbox
+                    name="isCorrect1"
+                    checked={this.state.isCorrect1}
+                    onChange={(e) => this.handleChecked(e)}
+                    color="primary"
+                  />
+                </GridListTile>
+            </GridList>
+            <GridList className={'height: auto'} cols={3}>
+                <GridListTile style={{'height': 'auto'}} rows={1} cols={2}>
+                  <BootstrapInput id="bootstrap-input" multiline
+                    name="ans2"
+                    rowsMax={4}
+                    value={this.state.question}
+                    style={{'width': '100%', 'height': 'auto'}}
+                    onChange={(e) => this.handleChange(e)}
+                    />
+                </GridListTile>
+                <GridListTile style={{'height': 'auto'}} rows={1} cols={1}>
+                  <Checkbox
+                    name="isCorrect2"
+                    checked={this.state.isCorrect2}
+                    onChange={(e) => this.handleChecked(e)}
+                    color="primary"
+                  />
+                </GridListTile>
+            </GridList>
+          </CardContent>
+          <CardContent>
+            <GridList id="addAnsGrid" cols={3}>
+                <GridListTile style={{'textAlign': 'center', 'height': 'auto'}} rows={1} cols={3}>
+                  <Button variant="outlined" onClick={() => { alert('clicked') }}>
+                    Add
+                  </Button>
+                </GridListTile>
+            </GridList>
           </CardContent>
         {/* <CardActions>
           <Button size="small" color="primary">

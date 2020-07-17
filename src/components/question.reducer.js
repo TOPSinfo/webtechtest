@@ -1,18 +1,20 @@
 import { questionTypes } from "./question.types";
+// interface IState = {
+//     list: []array,
+//     current_que: Object
+// }
 
-const initialState = {
-    list: [],
-    current_que: {}
-}
-
-export default function (state, action) {
-    const { type, payload } = action;
-    state = initialState;
-    switch (type) {
+export default (state = {
+        list: [],
+        current_que: {}
+    }, action) => {
+        const { type, payload } = action;
+        
+        switch (type) {
         case questionTypes.GET_LIST:
             return {
                 ...state,
-                list: state.list.append(payload),
+                list: payload,
             };
         case questionTypes.GET_CURRENT_QUESTION:
             return {
@@ -21,7 +23,8 @@ export default function (state, action) {
         case questionTypes.ADD_QUESTION:
             return {
                 ...state,
-                list: state.list.append(payload),
+                // list: state.list.append(payload),
+                list: payload,
             };
         
       default:

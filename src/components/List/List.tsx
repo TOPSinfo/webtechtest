@@ -7,38 +7,18 @@ import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import { makeStyles } from '@material-ui/core/styles';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-    '& > *': {
-      margin: theme.spacing(1),
-    },
-  },
-  margin: {
-    margin: theme.spacing(1),
-  },
-  extendedIcon: {
-    marginRight: theme.spacing(1),
-  },
-}));
-
 interface Props {
   listQue?: any,
   questionList?: any,
   question?: Object
 };
 
-interface State {
-  question: Object
-}
+// interface rootState {
+//   questionList: any,
+//   question: Object
+// }
 
-interface rootState {
-  listQue: any,
-  questionList: any,
-  question: Object
-}
-
-export class List extends React.Component<Props, State> {
+export class List extends React.Component<Props, {}> {
 
   // Before the component mounts, we initialise our state
   componentWillMount() {
@@ -52,8 +32,9 @@ export class List extends React.Component<Props, State> {
   // render will know everything!
   render() {
     // const classes = useStyles();
+    console.log('this.propssss', this.props)
     return <div>
-        {this.props.questionList.map((que: Object) => (
+        {this.props.questionList && this.props.questionList.map((que: Object) => (
             <GridList cellHeight={160} cols={3}>
                 <GridListTile cols={2}>
                   que['que']
@@ -74,17 +55,18 @@ export class List extends React.Component<Props, State> {
   }
 }
 
-// const mapStateToProps = ({ question : any }) => ({
-//   questionList: question.list
-// });
+const mapStateToProps = ({ question }:any) => ({
+  questionList: question.list
+});
 
-function mapStateToProps(props: Props): Props {
-  console.log('props here is', props)
-  return props;
-}
+// function mapStateToProps(question: rootState): rootState {
+//   console.log('props here is', question)
+//   // let questionList = question['list']
+//   return question;
+// }
 
-const mapDispatchToProps = {
-  listQue
-};
+const mapDispatchToProps = (dispatch:any) => ({
+  listQue: () => dispatch(listQue())
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(List);

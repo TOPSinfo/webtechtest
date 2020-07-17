@@ -4,7 +4,8 @@ import * as QuestionServices from "../services/question.service";
 export const addQuestion = (data) => async (dispatch) => {
   try {
     const res = await QuestionServices.addQuestion(data);
-    dispatch({
+    console.log('---res', res);
+    return dispatch({
         type: questionTypes.ADD_QUESTION,
         payload: data,
       });
@@ -15,7 +16,7 @@ export const addQuestion = (data) => async (dispatch) => {
 
 export const editQue = (data) => async (dispatch) => {
   try {
-    dispatch({
+    return dispatch({
         type: questionTypes.GET_CURRENT_QUESTION,
         payload: data,
       });
@@ -28,7 +29,7 @@ export const listQue = () => async (dispatch) => {
   try {
     const res = await QuestionServices.getQuestionList();
     if (res) {
-      dispatch({
+      return dispatch({
         type: questionTypes.GET_LIST,
         payload: res,
       });
