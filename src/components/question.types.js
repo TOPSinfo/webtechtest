@@ -1,0 +1,5 @@
+export const questionTypes = {
+    GET_LIST: "GET_LIST",
+    GET_CURRENT_QUESTION: "GET_CURRENT_QUESTION",
+    ADD_QUESTION: "ADD_QUESTION"
+}  
