@@ -12,3 +12,9 @@ export async function addQuestion(data) {
     // let adddata = res.data;
     return res;
 }
+
+export async function updateQuestion(data) {
+    let res = await axios.patch('https://opentdb.com/api.php', data);
+    // let adddata = res.data;
+    return res;
+}

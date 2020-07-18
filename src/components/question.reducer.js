@@ -4,10 +4,14 @@ import { questionTypes } from "./question.types";
 //     current_que: Object
 // }
 
+const getUpdatedList = (stateList, deleteQue) => {
+    return stateList.filter(list => list.question !== deleteQue)
+}
+
 export default (state = {
-        list: [],
-        current_que: {}
-    }, action) => {
+    list: [],
+    current_que:{}
+}, action) => {
         const { type, payload } = action;
         
         switch (type) {
@@ -16,6 +20,11 @@ export default (state = {
                 ...state,
                 list: payload,
             };
+        case questionTypes.LOAD_MORE_LIST:
+            return {
+                ...state,
+                list: payload.append(state.list)
+            }
         case questionTypes.GET_CURRENT_QUESTION:
             return {
                 current_que: payload,
@@ -26,6 +35,11 @@ export default (state = {
                 // list: state.list.append(payload),
                 list: payload,
             };
+        case questionTypes.DELETE_QUESTION:
+            return {
+                ...state,
+                list: getUpdatedList(state.list, payload)
+            }
         
       default:
         return state;
