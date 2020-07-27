@@ -43,10 +43,19 @@ export interface SetUpdateQuestion {
   updateData: QuestionList
 }
 
+export interface SetLoader {
+  type: 'IS_LOADING'
+  isLoading: boolean
+}
+
 // Union Action Types
-export type Action = SetListQuestion | EditQuestion | SetMoreQuestion | SetDeleteQuestion | SetAddQuestion | SetUpdateQuestion
+export type Action = SetLoader | SetListQuestion | EditQuestion | SetMoreQuestion | SetDeleteQuestion | SetAddQuestion | SetUpdateQuestion
 
 // Action Creators
+export const loader = (isLoading: boolean): SetLoader => {
+  return { type: 'IS_LOADING', isLoading }
+}
+
 export const list = (listQuestion: QuestionList[]): SetListQuestion => {
   return { type: 'GET_LIST', listQuestion }
 }
@@ -76,10 +85,12 @@ export const setList = (): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
   // Invoke API
   return async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
     return new Promise<void>((resolve) => {
+      dispatch(loader(true))
       axios.get('https://opentdb.com/api.php?amount=10&category=21&difficulty=medium&type=multiple')
       .then((res: any) => {
         console.log('----res', res)
         dispatch(list(res.data.results))
+        dispatch(loader(false))
             console.log('set list in progress')
             resolve()
           })
@@ -100,14 +111,16 @@ export const loadMoreQuestion = (): ThunkAction<Promise<void>, {}, {}, AnyAction
   // Invoke API
   return async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
     return new Promise<void>((resolve) => {
+      dispatch(loader(true))
       axios.get('https://opentdb.com/api.php?amount=10&category=21&difficulty=medium&type=multiple')
       .then((res: any) => {
         console.log('----res', res)
+        dispatch(loader(false))
         dispatch(loadMore(res.data.results))
-            console.log('load more list in progress')
-            resolve()
-          })
+        console.log('load more list in progress')
+        resolve()
       })
+    })
   }
 }
 

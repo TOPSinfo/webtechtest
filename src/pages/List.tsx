@@ -9,6 +9,7 @@ import GridListTile from '@material-ui/core/GridListTile';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 type QuestionList = {
     category: string,
@@ -69,7 +70,7 @@ class List extends React.Component<Props, State> {
     console.log('this.props', this.props)
     return (
         <div>
-        <Card style={{'margin': '15Px'}}>
+        <Card style={{'margin': '15Px', 'textAlign': 'center'}}>
           <CardContent>
             <GridList cellHeight={160} cols={3}>
               <GridListTile style={{'height': 'auto'}} cols={1}>
@@ -81,8 +82,9 @@ class List extends React.Component<Props, State> {
                 </Button>
               </GridListTile>
             </GridList>
+            {this.props.questionReducer.isLoading && <CircularProgress style={{'padding': '30px'}}/>}
             {this.props.questionReducer && this.props.questionReducer.listQuestion.map((que: any) => (
-              <Card style={{'margin': '15Px'}}>
+              <Card style={{'margin': '15Px', 'textAlign': 'left'}}>
                 <CardContent>
                     <GridList cols={3}>
                       <GridListTile style={{'height': 'auto'}} cols={2}>

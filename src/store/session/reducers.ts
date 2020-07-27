@@ -13,7 +13,8 @@ import { Action } from './actions'
   }
 export interface QuestionReducer {
   listQuestion: QuestionList[],
-  currentQuestion?: QuestionList
+  currentQuestion?: QuestionList,
+  isLoading: boolean
 }
 
 export interface State {
@@ -29,8 +30,10 @@ const getUpdatedList = (stateList: QuestionList[], updateQue: string, updateData
     })
 }
 
-const questionReducer = (state: QuestionReducer = { listQuestion: [] }, action: Action): QuestionReducer => {
+const questionReducer = (state: QuestionReducer = { listQuestion: [], isLoading: false }, action: Action): QuestionReducer => {
   switch (action.type) {
+    case 'IS_LOADING':
+      return { ...state, isLoading: action.isLoading }
     case 'GET_LIST':
       return { ...state, listQuestion: action.listQuestion }
     case 'GET_CURRENT_QUESTION':
@@ -38,11 +41,14 @@ const questionReducer = (state: QuestionReducer = { listQuestion: [] }, action: 
     case 'LOAD_MORE_QUESTION':
       return { ...state, listQuestion: [ ...action.moreQuestion, ...state.listQuestion]}
     case 'DELETE_QUESTION':
-      return { ...state, listQuestion: state.listQuestion.filter(list => list.question !== action.question)}
+      return { ...state, currentQuestion: {category: '', type: '', difficulty: '', question: '', correct_answer: '', incorrect_answers: [] },
+        listQuestion: state.listQuestion.filter(list => list.question !== action.question)}
     case 'ADD_QUESTION':
       return { ...state, listQuestion: [ action.addData, ...state.listQuestion]}
     case 'UPDATE_QUESTION':
-      return { ...state, listQuestion: getUpdatedList(state.listQuestion, action.updateQue , action.updateData)}
+      return { ...state, currentQuestion: {category: '', type: '', difficulty: '', question: '', correct_answer: '', incorrect_answers: [] },
+        listQuestion: getUpdatedList(state.listQuestion, action.updateQue , action.updateData)
+      }
   }
   return state
 }

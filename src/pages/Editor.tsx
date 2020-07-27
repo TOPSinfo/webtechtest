@@ -9,6 +9,7 @@ import Button from '@material-ui/core/Button';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
+import parse from 'html-react-parser';
 
 import { RootState } from '../store'
 import { addQuestion, updateQuestion } from '../store/session/actions'
@@ -69,17 +70,21 @@ class Login extends React.Component<Props, State> {
 	}
 
 	componentWillReceiveProps(nextProps: any) {
-		if (nextProps && nextProps.questionReducer.currentQuestion) { 
+		if (nextProps && nextProps.questionReducer.currentQuestion) {
 			let currentQue = nextProps.questionReducer.currentQuestion;
-			this.setState({
-				isEdit: true,
-				question: currentQue.question,
-				ans1: currentQue.correct_answer,
-				isCorrect1: true,
-				ans2: currentQue.incorrect_answers[0],
-				isCorrect2: false,
-				updateQue: currentQue.question
-			})
+			if (currentQue.question !== '') {
+				this.setState({
+					isEdit: true,
+					question: currentQue.question,
+					ans1: currentQue.correct_answer,
+					isCorrect1: true,
+					ans2: currentQue.incorrect_answers[0],
+					isCorrect2: false,
+					updateQue: currentQue.question
+				})
+			} else {
+				this.setState({ ...initialState })
+			}
 		}
 	}
 
@@ -150,7 +155,7 @@ class Login extends React.Component<Props, State> {
 										style={{ 'width': '100%', 'height': 'auto' }}
 										onChange={(e) => this.handleChange(e)}
 										name="question"
-										value={this.state.question}
+										value={parse(this.state.question)}
 										validators={['required']}
 										errorMessages={['Question is required']}
 									/>
